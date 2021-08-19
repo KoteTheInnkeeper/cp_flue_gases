@@ -25,6 +25,7 @@ class Database:
                 self.set_tables()
             except Exception:
                 log.critical("An exception was raised.")
+                raise DatabaseInitError("There was an error while trying to initialize the database.")
             finally:
                 log.debug("Database set up successfully.")
     
