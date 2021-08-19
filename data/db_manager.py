@@ -131,7 +131,7 @@ class Database:
             with DBCursor(self.host) as cursor:
                 cursor.execute(
                     "UPDATE fuels SET carbon=?, hydrogen=?, oxygen=?, nitrogen=?, sulfur=?, moisture=?, ashes=? WHERE name=?",
-                    (kC, kH, kO, kN, kS, kM, kAsh, name.lower())
+                    (kC/100, kH/100, kO/100, kN/100, kS/100, kM/100, kAsh/100, name.lower())
                     )
         except Exception:
             log.critical("An exception was raised.")
