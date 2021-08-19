@@ -17,3 +17,4 @@ from data.db_manager import Database
 host_name = 'stored_info'
 
 app_db = Database(host_name)
+app_db.add_fuel("NATGas", 40, 10, 10, 10, 10, 10, 10)
