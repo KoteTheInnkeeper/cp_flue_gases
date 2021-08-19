@@ -21,7 +21,7 @@ class Database:
                 # Checking if the database file exists at all
                 if not self.check_if_exists():
                     # Database file doesn't exists
-                    self.setting_file_from_zero()
+                    self.create_file()
                 self.set_tables()
             except Exception:
                 log.critical("An exception was raised.")
@@ -50,17 +50,14 @@ class Database:
             log.critical("Database file doesn't exists.")
             return False
     
-    def setting_file_from_zero(self) -> None:
+    def create_file(self) -> None:
         """Sets the database from zero. To be called when the file doesn't exists at all."""
         try:
             with open(self.host, 'w'):
                 log.debug("File created.")
-            self.set_tables()            
         except Exception:
             log.critical("An exception was raised")
             raise UnableToCreateFile("Couldn't create the database file.")
-        else:
-            log.debug("Successfully set the db from zero.")
 
     def set_tables(self) -> None:
         """Sets the tables."""
