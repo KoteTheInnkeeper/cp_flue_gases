@@ -1,7 +1,7 @@
 import os
 import logging
-from sqlite3.dbapi2 import OperationalError
 
+from sqlite3.dbapi2 import OperationalError
 from data.db_cursor import DBCursor
 from utils.errors import *
 
@@ -98,6 +98,48 @@ class Database:
             raise UnableToAdd("There was an issue when trying to add this fuel.")
         else:
             log.critical(f"This {name.title()} fuel was added successfully.")
+    
+    def fuel_exists(self, name: str) -> bool:
+        """Checks if the fuel exists at all.
+        :param name: fuel name."""
+        log.debug(f"Checking if the {name.title()} fuel exists in database.")
+        try:
+            with DBCursor(self.host) as cursor:
+                cursor.execute("SELECT name FROM fuels WHERE name=?", (name.lower(),))
+                result = cursor.fetchone()
+                return bool(result)
+        except Exception:
+            log.critical("An exception was raised.")
+            raise FuelNotConfirmed("The fuel's existance couldn't be confirmed.")
+
+    def update_fuel(self, name: str, kC: float, kH: float, kO: float, kN: float, kS: float, kM: float, kAsh: float):
+        """Adds the fuel.
+        :param name: fuel's name.
+        :param kC: carbon prescence in %
+        :param kH: hydrogen prescence in %
+        :param kO: oxygen prescence in %
+        :param kN: nitrogen prescence in %
+        :param kS: sulfur prescence in %
+        :param kM: moisture prescence in %
+        :param kAsh: ashes prescence in %"""
+        log.debug(f"Updating a so called {name.title()} fuel.")
+        try:
+            if not self.fuel_exists(name):
+                log.debug("The fuel doesn't exists")
+                raise FuelNotFound("The fuel can't be updated since it doesn't exists.")
+            log.debug("The fuel exists.")
+            with DBCursor(self.host) as cursor:
+                cursor.execute(
+                    "UPDATE fuels SET carbon=?, hydrogen=?, oxygen=?, nitrogen=?, sulfur=?, moisture=?, ashes=? WHERE name=?",
+                    (kC, kH, kO, kN, kS, kM, kAsh, name.lower())
+                    )
+        except Exception:
+            log.critical("An exception was raised.")
+            raise UnableToUpdate(f"This {name.title()} fuel couldn't be updated.")
+        else:
+            log.debug(f"{name.title()} was successfully updated.")
+
+
 
         
     

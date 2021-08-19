@@ -21,3 +21,15 @@ class UnableToAdd(Exception):
 class DuplicatedName(Exception):
     def __init__(self, message: str) -> None:
         super().__init__(message)
+
+class UnableToUpdate(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
+
+class FuelNotConfirmed(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
+
+class FuelNotFound(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
