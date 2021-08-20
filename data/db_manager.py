@@ -4,6 +4,7 @@ import logging
 from sqlite3.dbapi2 import OperationalError
 from data.db_cursor import DBCursor
 from utils.errors import *
+from typing import Tuple, Union
 
 # Setting loggers
 log = logging.getLogger('cp_flue_gases.db_manager')
@@ -133,11 +134,39 @@ class Database:
                     "UPDATE fuels SET carbon=?, hydrogen=?, oxygen=?, nitrogen=?, sulfur=?, moisture=?, ashes=? WHERE name=?",
                     (kC/100, kH/100, kO/100, kN/100, kS/100, kM/100, kAsh/100, name.lower())
                     )
+        except FuelNotFound:
+            raise
         except Exception:
             log.critical("An exception was raised.")
             raise UnableToUpdate(f"This {name.title()} fuel couldn't be updated.")
         else:
             log.debug(f"{name.title()} was successfully updated.")
+    
+    def get_fuel_composition(self, name: str) -> Tuple[Union[str, float]]:
+        """Gets the fuel's composition with a given name.
+        :param name: the fuel's name."""
+        try:
+            log.debug(f"Getting the composition for {name.title()}.")
+            if not self.fuel_exists(name):
+                raise FuelNotFound(f"This {name.title()} fuel wasn't found.")
+            with DBCursor(self.host) as cursor:
+                cursor.execute(
+                    """SELECT carbon, hydrogen, oxygen, nitrogen, sulfur, moisture, ashes
+                    FROM fuels WHERE name=?
+                    """,
+                    (name.lower(),)
+                )
+                found_fuel = cursor.fetchone()           
+        except FuelNotFound:
+            log.critical(f"This {name.title()} fuel wasn't found.")
+            raise
+        except Exception:
+            log.critical("An exception was raised.")
+            raise CompositionNotFound("Couldn't get the composition for this fuel.")
+        else:
+            found_fuel = (name.lower(), *found_fuel)
+            log.debug(f"A fuel tuple was found: {found_fuel}.")
+            return found_fuel
 
 
 

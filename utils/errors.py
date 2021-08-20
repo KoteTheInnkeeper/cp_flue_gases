@@ -33,3 +33,7 @@ class FuelNotConfirmed(Exception):
 class FuelNotFound(Exception):
     def __init__(self, message: str) -> None:
         super().__init__(message)
+
+class CompositionNotFound(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
