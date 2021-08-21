@@ -37,3 +37,7 @@ class FuelNotFound(Exception):
 class CompositionNotFound(Exception):
     def __init__(self, message: str) -> None:
         super().__init__(message)
+
+class FuelIntegrityError(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
