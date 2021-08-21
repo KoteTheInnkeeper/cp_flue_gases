@@ -13,7 +13,11 @@ log = logging.getLogger('cp_flue_gases')
 
 # Test Area
 from data.db_manager import Database
+from utils.fuel import Fuel
 
 host_name = 'stored_info'
 
 app_db = Database(host_name)
+app_db.update_fuel('lignite_coal', 51.12, 3.89, 14.65, 0.61, 1.87, 14.36, 13.5)
+nat_gas = Fuel('lignite_coal', app_db)
+
