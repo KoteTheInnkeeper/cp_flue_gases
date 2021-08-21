@@ -164,8 +164,7 @@ class Database:
             log.critical("An exception was raised.")
             raise CompositionNotFound("Couldn't get the composition for this fuel.")
         else:
-            found_fuel = (name.lower(), *found_fuel)
-            log.debug(f"A fuel tuple was found: {found_fuel}.")
+            log.debug(f"A Fuel tuple was found for {name.title()}: {found_fuel}.")
             return found_fuel
 
 
