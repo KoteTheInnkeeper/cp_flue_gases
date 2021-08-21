@@ -5,6 +5,7 @@ from utils.fuel import Fuel
 from math import log as loga
 from math import exp
 from utils.errors import *
+from typing import Tuple, List
 
 
 class SingleTCombustion:
@@ -25,16 +26,19 @@ class SingleTCombustion:
         else:
             log.debug("SingleTCombustion object succcessfully instanciated.")
 
-    def get_cp(self):
+    def get_cp(self) -> float:
+        return self.cp_for_T(self.T)
+
+    def cp_for_T(self, T: float) -> float:
         """Gets the specific mean heat for the given temperature within this method."""
-        C_pC = Approximations.C_pC(self.T)
-        a_C = self.a_C(self.T)
-        b_N = self.b_N(self.T)
-        c_H = self.c_H(self.T)
-        d_S = self.d_S(self.T)
+        C_pC = Approximations.C_pC(T)
+        a_C = self.a_C(T)
+        b_N = self.b_N(T)
+        c_H = self.c_H(T)
+        d_S = self.d_S(T)
         m_tot_steo = self.fuel.min_gas_total
         m_tot_flue_gas = self.fuel.total_flue_gas(self.n)
-        f_A = self.f_m() * Approximations.C_pA(self.T)
+        f_A = self.f_m() * Approximations.C_pA(T)
         cp = C_pC / (a_C + b_N + c_H + d_S) * m_tot_steo / m_tot_flue_gas + f_A
         return round(cp, 4)
     
@@ -88,6 +92,39 @@ class SingleTCombustion:
         m_flue_gas = self.fuel.total_flue_gas(self.n)
         return (m_air_steo * (self.n - 1)) / m_flue_gas
     
+
+class MultipleTCombustion(SingleTCombustion):
+    def __init__(self, fuel: Fuel, n: float, T_init: float, T_end: float, step: float):
+        try:
+            log.debug("A MultipleTCombustion is being instanciated.")
+            self.n = float(abs(n))
+            if abs(T_init) == abs(T_end):
+                raise InvalidTemperatures("Both temperatures are the same.")
+            elif abs(T_init) > abs(T_end):
+                self.T_init = float(abs(T_end))
+                self.T_end = float(abs(T_init) + step)
+            else:
+                self.T_init = float(abs(T_init))
+                self.T_end = float(abs(T_end) + step)
+            self.step = float(abs(step))
+            if not isinstance(fuel, Fuel):
+                raise InvalidFuel("The provided fuel isn't a Fuel object.")
+            self.fuel = fuel
+        except ValueError:
+            log.critical("An invalid number was entered.")
+            raise InvalidNumbers("Calculations can't be performed if the temperatures, dilution factor and step aren't numbers.")
+        else:
+            log.debug("The MultipleTCombustion object has been instanciated successfully.")
+
+    def get_cp(self) -> List[Tuple[float]]:
+        T_range = range(int(self.T_init), int(self.T_end))
+        cp_list = []
+        for T in T_range:
+            cp_list.append((T, self.cp_for_T(T)))
+        return cp_list
+
+
+
 
 class Approximations:
     @classmethod
