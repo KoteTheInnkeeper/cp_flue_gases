@@ -89,7 +89,7 @@ class Database:
             with DBCursor(self.host) as cursor:
                 cursor.execute(
                     "INSERT INTO fuels VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                    (name.lower(),kC/100, kH/100, kO/100, kN/100, kS/100, kM/100, kAsh/100)
+                    (name.lower(),round(kC/100, 4), round(kH/100, 4), round(kO/100, 4), round(kN/100, 4), round(kS/100, 4), round(kM/100, 4), round(kAsh/100, 4))
                 )
         except IntegrityError:
             log.critical("An IntegrityError was raised, meaning the name wasn't unique.")
@@ -132,7 +132,7 @@ class Database:
             with DBCursor(self.host) as cursor:
                 cursor.execute(
                     "UPDATE fuels SET carbon=?, hydrogen=?, oxygen=?, nitrogen=?, sulfur=?, moisture=?, ashes=? WHERE name=?",
-                    (kC/100, kH/100, kO/100, kN/100, kS/100, kM/100, kAsh/100, name.lower())
+                    (round(kC/100, 4), round(kH/100, 4), round(kO/100, 4), round(kN/100, 4), round(kS/100, 4), round(kM/100, 4), round(kAsh/100, 4), name.lower())
                     )
         except FuelNotFound:
             raise
