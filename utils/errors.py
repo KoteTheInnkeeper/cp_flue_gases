@@ -45,3 +45,11 @@ class FuelIntegrityError(Exception):
 class InvalidFuel(Exception):
     def __init__(self, message: str) -> None:
         super().__init__(message)
+
+class InvalidNumbers(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
+
+class InvalidTemperatures(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)
