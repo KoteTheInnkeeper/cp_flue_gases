@@ -24,9 +24,9 @@ class Fuel:
         else:
             log.debug("Fuel object correctly initialized. Calculating their minimum air and gas.")
             # Calculating the minimum amount of air per kg of fuel.
-            self.min_air = (2.9978 * self.kH - 0.3747 * (self.kS - self.kO) + self.kC) * 11.445
+            self.min_air = round((2.9978 * self.kH + 0.3747 * (self.kS - self.kO) + self.kC) * 11.445, 4)
             # Calculating the minimum total gas after burning this fuel.
-            self.min_gas_total = self.min_air + (1 - self.kAsh)
+            self.min_gas_total = round((2.9978 * self.kH + 0.3747 * (self.kS - self.kO) + self.kC) * 11.445, 4) + (1 - self.kAsh)
 
     def has_integrity(self) -> bool:
         """Checks if the given composition adds up to a 100% (1)."""
@@ -39,6 +39,18 @@ class Fuel:
     
     def __repr__(self) -> str:
         return f"""<<FUEL OBJECT NAMED {self.name.upper()}>>"""
+    
+    def required_air(self, n: float) -> float:
+        """Returns the required air given a dilution factor n.
+        :param n: dilution factor, a float that expresses 'how many times the minimum air' is being used."""
+        return self.min_air * n
+    
+    def total_flue_gas(self, n: float) -> float:
+        """Return the total flue gas for this fuel given a dilution factor n.
+        :param n: dilution factor, a float that expresses 'how many times the minimum air' is being used."""
+        return self.required_air(n) + (1 - self.kAsh)    
+
+
 
         
         
