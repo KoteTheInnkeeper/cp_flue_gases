@@ -12,6 +12,7 @@ class SingleTCombustion:
         """A class to handle single temperatures combustion.
         :param n: dilution factor
         :param T: temperature in K"""
+        log.debug("A SingleTCombustion is being instanciated.")
         try:
             if not isinstance(fuel, Fuel):
                 raise InvalidFuel("The provided fuel isn't a Fuel object.")
@@ -22,28 +23,64 @@ class SingleTCombustion:
             log.critical("An exception was raised.")
             raise
         else:
-            log.debug("SingleTCombustion object succcessfully instanciated. Calculating mayor coefficients.")
-        
+            log.debug("SingleTCombustion object succcessfully instanciated.")
+
+    def get_cp(self):
+        """Gets the specific mean heat for the given temperature within this method."""
+        C_pC = Approximations.C_pC(self.T)
+        a_C = self.a_C(self.T)
+        b_N = self.b_N(self.T)
+        c_H = self.c_H(self.T)
+        d_S = self.d_S(self.T)
+        m_tot_steo = self.fuel.min_gas_total
+        m_tot_flue_gas = self.fuel.total_flue_gas(self.n)
+        f_A = self.f_m() * Approximations.C_pA(self.T)
+        cp = C_pC / (a_C + b_N + c_H + d_S) * m_tot_steo / m_tot_flue_gas + f_A
+        return round(cp, 4)
     
+    # Mayor coefficients
+    def b_N(self, T: float) -> float:
+        b_m = self.b_m()
+        b_cp = Approximations.b_cp(T)
+        return b_m / b_cp
+
+    def c_H(self, T: float) -> float:
+        c_m = self.c_m()
+        c_cp = Approximations.c_cp(T)
+        return c_m / c_cp
+
+    def d_S(self, T: float) -> float:
+        d_m = self.d_m()
+        d_cp = Approximations.d_Cp(T)
+        return d_m / d_cp
+
+    def a_C(self, T: float) -> float:
+        return self.a_m()
 
     # Minor coefficients methods
+    def a_m(self) -> float:
+        m_C = 3.667 * self.fuel.kC
+        m_tot_steo = self.fuel.min_gas_total
+        return m_C / m_tot_steo
+        
+
     def b_m(self) -> float:
         """Returns the mass ratio of N2 to total flue gas."""
         m_N = 0.767 * self.fuel.min_air + self.fuel.kN
-        m_tot_flue_gas = self.fuel.total_flue_gas(self.n)
-        return m_N / m_tot_flue_gas
+        m_tot_steo = self.fuel.min_gas_total
+        return m_N / m_tot_steo
     
     def c_m(self) -> float:
         """Returns the mass ratio of H2O to total flue gas."""
         m_H = 8.938 * self.fuel.kH + self.fuel.kM
-        m_tot_flue_gas = self.fuel.total_flue_gas(self.n)
-        return m_H / m_tot_flue_gas
+        m_tot_steo = self.fuel.min_gas_total
+        return m_H / m_tot_steo
     
     def d_m(self) -> float:
         """Returns the mass ratio of SO2 to total flue gas."""
         m_S = 2 * self.fuel.kS
-        m_tot_flue_gas = self.fuel.total_flue_gas(self.n)
-        return m_S / m_tot_flue_gas
+        m_tot_steo = self.fuel.min_gas_total
+        return m_S / m_tot_steo
     
     def f_m(self) -> float:
         """Returns another coefficient correct the excess air amount."""
@@ -69,7 +106,6 @@ class Approximations:
     def d_Cp(cls, T: float) -> float:
         """Specific heat ratio of CO2 to SO2 for the given temperature T.
         :param T: temperature in K"""
-        exp()
         return exp(2.679 - 151.16 / T - 0.289 * loga(T, exp(1)))
     
     @classmethod
