@@ -101,12 +101,12 @@ class MultipleTCombustion(SingleTCombustion):
             if abs(T_init) == abs(T_end):
                 raise InvalidTemperatures("Both temperatures are the same.")
             elif abs(T_init) > abs(T_end):
-                self.T_init = float(abs(T_end))
-                self.T_end = float(abs(T_init) + step)
+                self.T_init = int(abs(T_end))
+                self.T_end = int(abs(T_init) + step)
             else:
-                self.T_init = float(abs(T_init))
-                self.T_end = float(abs(T_end) + step)
-            self.step = float(abs(step))
+                self.T_init = int(abs(T_init))
+                self.T_end = int(abs(T_end) + step)
+            self.step = int(abs(step))
             if not isinstance(fuel, Fuel):
                 raise InvalidFuel("The provided fuel isn't a Fuel object.")
             self.fuel = fuel
@@ -117,13 +117,11 @@ class MultipleTCombustion(SingleTCombustion):
             log.debug("The MultipleTCombustion object has been instanciated successfully.")
 
     def get_cp(self) -> List[Tuple[float]]:
-        T_range = range(int(self.T_init), int(self.T_end))
+        T_range = range(self.T_init, self.T_end, self.step)
         cp_list = []
         for T in T_range:
             cp_list.append((T, self.cp_for_T(T)))
         return cp_list
-
-
 
 
 class Approximations:
