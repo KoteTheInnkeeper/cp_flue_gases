@@ -51,13 +51,13 @@ class UIMainWindow(object):
 
         # Top left menu buttons
         self.toggle_btn = LeftMenuPushButton(text="Hide menu", icon_path="hamburger_icon.svg")
-        self.btn_1 = LeftMenuPushButton(text="Home", is_active=True, icon_path="home_icon.svg")
-        self.btn_2 = LeftMenuPushButton(text="Op", icon_path="plug_icon.svg")
+        self.cp_btn = LeftMenuPushButton(text="Specific heat", is_active=True, icon_path="fume_icon.svg")
+        self.fuel_btn = LeftMenuPushButton(text="Fuel", icon_path="fuel_icon.svg")
 
         # Add buttons to the layout
         self.left_menu_top_layout.addWidget(self.toggle_btn)
-        self.left_menu_top_layout.addWidget(self.btn_1)
-        self.left_menu_top_layout.addWidget(self.btn_2)
+        self.left_menu_top_layout.addWidget(self.cp_btn)
+        self.left_menu_top_layout.addWidget(self.fuel_btn)
 
         # Spacer to separate the 'managing' buttons from the 'settings' one.
         self.left_menu_spacer = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -74,10 +74,10 @@ class UIMainWindow(object):
         self.left_menu_bottom_layout.setSpacing(0)
 
         # Bottom left menu button
-        self.settings_btn = LeftMenuPushButton(text="Settings", icon_path="settings_icon.svg")
+        self.about_btn = LeftMenuPushButton(text="About", icon_path="about_icon.svg")
 
         # Adding this button to the layout
-        self.left_menu_bottom_layout.addWidget(self.settings_btn)
+        self.left_menu_bottom_layout.addWidget(self.about_btn)
 
         # Version label
         self.version_label = QLabel("v1.0.0")
@@ -94,7 +94,7 @@ class UIMainWindow(object):
 
         # Content frame
         self.content = QFrame()
-        self.content.setStyleSheet("background-color: #282a36")
+        self.content.setStyleSheet(f"background-color: {Color.CONTENT_BG}")
 
         # Content layout. The following syntax reads as "create a vertical layout for the self.content frame"
         self.content_layout = QVBoxLayout(self.content)
@@ -108,13 +108,13 @@ class UIMainWindow(object):
         self.top_bar.setStyleSheet("background-color: #21232d; color: #6272a4")
 
         # Left label
-        self.top_label_left = QLabel("First PySide6 app")
+        self.top_label_left = QLabel("Specific mean heat for flue gases calculator")
 
         # Top spacer
         self.top_spacer = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         # Right label
-        self.top_label_right = QLabel("| HOME PAGE")
+        self.top_label_right = QLabel("| Specific heat")
         self.top_label_right.setStyleSheet("font: 700 9pt 'Segoe UI'")
 
         # Top bar horizontal layout

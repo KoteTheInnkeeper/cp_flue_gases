@@ -1,3 +1,4 @@
+from gui.gui_constants import Color
 import os
 
 from gui.qt_core import *
@@ -62,7 +63,7 @@ class LeftMenuPushButton(QPushButton):
         active_str =f"""
         QPushButton {{
             background-color: {self.btn_hover};
-            border-right: 5px solid #282a36;
+            border-right: 5px solid {Color.LEFT_MENU_ACTIVE_BTN_COLOR};
         }}
         """
 
@@ -97,7 +98,7 @@ class LeftMenuPushButton(QPushButton):
     def draw_icon(self, qp: QPainter, image: str, rect: QRect, color: str):
         # Format path
         app_path = os.path.abspath(os.getcwd())
-        folder = "gui/icons"
+        folder = "gui/images/icons"
         path = os.path.join(app_path, folder)
         icon_path = os.path.normpath(os.path.join(path, image))
 

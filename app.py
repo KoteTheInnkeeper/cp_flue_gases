@@ -1,3 +1,4 @@
+from gui.gui_constants import Dimension
 import logging
 import sys
 
@@ -35,8 +36,76 @@ class MainWindow(QMainWindow):
         self.ui = UIMainWindow()
         self.ui.setup_ui(self)
 
+        # Signal for hamburger button
+        self.ui.toggle_btn.clicked.connect(self.hamburger_btn)
+        
+        # Signal for other btns
+        self.ui.cp_btn.clicked.connect(self.cp_btn)
+        self.ui.fuel_btn.clicked.connect(self.fuel_btn)
+        self.ui.about_btn.clicked.connect(self.about_btn)
+
+
         # Showing the main window
         self.show()
+
+    def hamburger_btn(self):
+        """Changes the menu width"""
+        log.debug("Playing the animation for the left menu.")
+        # Animation needed parameters
+        # Get the menu's width
+        menu_width = self.ui.left_menu.width()
+        
+        # Check width
+        width = Dimension.LEFT_MENU_MIN_WIDTH
+        if menu_width == Dimension.LEFT_MENU_MIN_WIDTH:
+            width = Dimension.LEFT_MENU_MAX_WIDTH
+    
+        # Start animation
+        self.animation = QPropertyAnimation(self.ui.left_menu, b"minimumWidth")
+        self.animation.setStartValue(menu_width)
+        self.animation.setEndValue(width)
+        self.animation.setDuration(500)
+        self.animation.setEasingCurve(QEasingCurve.InOutCirc)
+        self.animation.start()
+
+    def reset_selection(self):
+        """Clears all selections"""
+        for btn in self.ui.left_menu.findChildren(QPushButton):
+            try:
+                btn.set_active(False)
+            except Exception:
+                log.critical("An exception was raised.")
+                pass
+
+    def cp_btn(self):
+        """Changes the page to the specific mean heat page."""
+        try:
+            self.reset_selection()
+            self.ui.cp_btn.set_active(True)
+            self.ui.top_label_right.setText("| Specific heat")
+        except Exception:
+            log.critical("An exception was raised.")
+            raise
+    
+    def about_btn(self):
+        """Changes the page to the specific mean heat page."""
+        try:
+            self.reset_selection()
+            self.ui.about_btn.set_active(True)
+            self.ui.top_label_right.setText("| About")
+        except Exception:
+            log.critical("An exception was raised.")
+            raise
+    
+    def fuel_btn(self):
+        """Changes the page to the specific mean heat page."""
+        try:
+            self.reset_selection()
+            self.ui.fuel_btn.set_active(True)
+            self.ui.top_label_right.setText("| Fuel")
+        except Exception:
+            log.critical("An exception was raised.")
+            raise
 
 
 # If we're on main, run the app

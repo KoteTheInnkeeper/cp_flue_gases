@@ -2,6 +2,14 @@ class Dimension:
     BOT_BAR_HEIGHT = 30
     TOP_BAR_HEIGHT = 30
 
+    LEFT_MENU_MIN_WIDTH = 50
+    LEFT_MENU_MAX_WIDTH = 160
+
 
 class Color:
     LEFT_MENU_BG_COLOR = ""
+
+    TOP_BOT_BAR_BG = "#FFA69E"
+
+    CONTENT_BG = "#fbf8f4"
+    LEFT_MENU_ACTIVE_BTN_COLOR = CONTENT_BG
