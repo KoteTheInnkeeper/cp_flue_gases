@@ -13,7 +13,7 @@ class UIMainWindow(object):
 
         # Create central frame
         self.central_frame = QFrame()
-        self.central_frame.setStyleSheet("background-color: #282a36")
+        self.central_frame.setStyleSheet(f"background-color: {Color.CONTENT_BG}")
 
         # Layouts are used to organize our widgets within frames.
         # Create main layout
@@ -24,7 +24,7 @@ class UIMainWindow(object):
 
         # Left menu
         self.left_menu = QFrame()
-        self.left_menu.setStyleSheet("background-color: #44475a")
+        self.left_menu.setStyleSheet(f"background-color: {Color.LEFT_MENU_BG_COLOR}")
         # Setting dimensions
         self.left_menu.setMaximumWidth(50)
         self.left_menu.setMinimumWidth(50)
@@ -40,10 +40,7 @@ class UIMainWindow(object):
         # In order to differentiate the widgets or items and be able to apply specifics stylesheet to each of them,
         # it is a good practice to 'set objects names' like so
         self.left_menu_top_frame.setObjectName("left_menu_top_frame")
-        # With this, we can specify a certain stylesheet, even when it's applied to the 'left_menu_top_frame' (as it's called in 
-        # our python code), to only apply TO THE FRAME if we refeer to it as we would in CSS (with an # preceding the object's name)
-        self.left_menu_top_frame.setStyleSheet("#left_menu_top_frame {background-color: #44475a; }")
-
+       
         # Top button frame layout.
         self.left_menu_top_layout = QVBoxLayout(self.left_menu_top_frame)
         self.left_menu_top_layout.setContentsMargins(0, 0, 0, 0)
@@ -66,7 +63,6 @@ class UIMainWindow(object):
         self.left_menu_bottom_frame = QFrame()
         self.left_menu_bottom_frame.setMinimumHeight(50)
         self.left_menu_bottom_frame.setObjectName("left_menu_bottom_frame")
-        #self.left_menu_bottom_frame.setStyleSheet("#left_menu_bottom_frame {background-color: red;}")
 
         # Bottom button frame layout.
         self.left_menu_bottom_layout = QVBoxLayout(self.left_menu_bottom_frame)
@@ -105,7 +101,7 @@ class UIMainWindow(object):
         self.top_bar = QFrame()
         self.top_bar.setMaximumHeight(Dimension.TOP_BAR_HEIGHT)
         self.top_bar.setMinimumHeight(Dimension.TOP_BAR_HEIGHT)
-        self.top_bar.setStyleSheet("background-color: #21232d; color: #6272a4")
+        self.top_bar.setStyleSheet(f"background-color: {Color.TOP_BOT_BAR_BG}; color: {Color.TOP_BOT_BAR_TEXT}")
 
         # Left label
         self.top_label_left = QLabel("Specific mean heat for flue gases calculator")
@@ -140,7 +136,7 @@ class UIMainWindow(object):
         self.bottom_bar = QFrame()
         self.bottom_bar.setMaximumHeight(Dimension.BOT_BAR_HEIGHT)
         self.bottom_bar.setMinimumHeight(Dimension.BOT_BAR_HEIGHT)
-        self.bottom_bar.setStyleSheet("background-color: #21232d; color: #6272a4")
+        self.bottom_bar.setStyleSheet(f"background-color: {Color.TOP_BOT_BAR_BG}; color: {Color.TOP_BOT_BAR_TEXT}")
 
         # Bottom bar layout
         self.bottom_bar_layout = QHBoxLayout(self.bottom_bar)

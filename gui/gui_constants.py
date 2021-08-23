@@ -7,9 +7,10 @@ class Dimension:
 
 
 class Color:
-    LEFT_MENU_BG_COLOR = ""
+    LEFT_MENU_BG_COLOR = "#44475a"
 
-    TOP_BOT_BAR_BG = "#FFA69E"
+    TOP_BOT_BAR_BG = "#21232d"
+    TOP_BOT_BAR_TEXT = "#6272a4"
 
     CONTENT_BG = "#fbf8f4"
     LEFT_MENU_ACTIVE_BTN_COLOR = CONTENT_BG
