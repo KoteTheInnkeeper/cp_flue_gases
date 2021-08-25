@@ -33,6 +33,13 @@ class Color:
     CHECKBOX_INDICATOR_CHECKED_BG = "rgb(52, 59, 72)"
     CHECKBOX_INDICATOR_CHECKED_BORDER = "rgb(52, 59, 72)"
 
+    FORM_BTN_TEXT = "#c3ccdf"
+    FORM_BTN_ICON_COLOR = "#c3ccdf"
+    FORM_BTN_COLOR = "#44475a"
+    FORM_BTN_HOVER = "#4f5368"
+    FORM_BTN_PRESSED = "#44475a"
+
+
 class Paths:
     COMBOBOX_DROPDOWN_ARROW = "./gui/images/icons/cil-arrow-bottom.png"
     CHECKBOX_CHECK = "./gui/images/icons/cil-check-alt.png"
