@@ -83,6 +83,7 @@ class MainWindow(QMainWindow):
             self.reset_selection()
             self.ui.cp_btn.set_active(True)
             self.ui.top_label_right.setText("| Specific heat")
+            self.ui.pages.setCurrentWidget(self.ui.ui_pages.cp_page)
         except Exception:
             log.critical("An exception was raised.")
             raise
@@ -93,6 +94,7 @@ class MainWindow(QMainWindow):
             self.reset_selection()
             self.ui.about_btn.set_active(True)
             self.ui.top_label_right.setText("| About")
+            self.ui.pages.setCurrentWidget(self.ui.ui_pages.about_page)
         except Exception:
             log.critical("An exception was raised.")
             raise
@@ -103,6 +105,7 @@ class MainWindow(QMainWindow):
             self.reset_selection()
             self.ui.fuel_btn.set_active(True)
             self.ui.top_label_right.setText("| Fuel")
+            self.ui.pages.setCurrentWidget(self.ui.ui_pages.fuel_page)
         except Exception:
             log.critical("An exception was raised.")
             raise

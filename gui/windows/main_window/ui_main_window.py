@@ -1,6 +1,8 @@
 from gui.qt_core import *
 from gui.widgets.form_widgets import LeftMenuPushButton
 from gui.gui_constants import *
+from gui.widgets.stacked_pages import *
+
 
 class UIMainWindow(object):
     def setup_ui(self, parent: QMainWindow):
@@ -126,11 +128,11 @@ class UIMainWindow(object):
 
         # Application pages ui_stacked_widget
         self.pages = QStackedWidget()
-        self.pages.setStyleSheet("font-size: 12pt; color: #f8f8f2; ")
-        """# Altough we created the 'stacked widget' here, we will use 'ui_pages.py' one to get the pages.
-        self.ui_pages = Ui_stacked_pages()
+        self.pages.setStyleSheet("font-size: 12pt; color: black; ")
+        # Altough we created the 'stacked widget' here, we will use 'ui_pages.py' to get the pages.
+        self.ui_pages = Ui_MainStackedWidget()
         self.ui_pages.setupUi(self.pages)
-        self.pages.setCurrentWidget(self.ui_pages.page_1)"""
+        self.pages.setCurrentWidget(self.ui_pages.cp_page)
 
         # Bottom bar within content frame
         self.bottom_bar = QFrame()
