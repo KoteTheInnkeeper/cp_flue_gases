@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-
 from gui.qt_core import *
+from gui.widgets.form_widgets import *
 
 class Ui_MainStackedWidget(object):
     def setupUi(self, MainStackedWidget):
@@ -13,6 +12,7 @@ class Ui_MainStackedWidget(object):
         self.cp_page = QWidget()
         self.cp_page.setObjectName(u"cp_page")
         MainStackedWidget.addWidget(self.cp_page)
+        # Setting layout
         self.cp_page_layout = QHBoxLayout(self.cp_page)
 
         # cp page widgets and items
@@ -21,24 +21,51 @@ class Ui_MainStackedWidget(object):
 
         # Adding items to cp page layout
         self.cp_page_layout.addWidget(self.test_label_1)
-
-        # Fuel page
+        
+        ###########################
+        ######## FUEL PAGE ########
+        ###########################
         self.fuel_page = QWidget()
         self.fuel_page.setObjectName(u"fuel_page")
         MainStackedWidget.addWidget(self.fuel_page)
-        self.fuel_page_layout = QHBoxLayout(self.fuel_page)
+        # Setting layout
+        self.fuel_page_layout = QVBoxLayout(self.fuel_page)
+        ######################################
+        ##### FUEL PAGE ITEMS AND WIDGETS ####
+        ######################################
 
-        # Fuel page widgets and items
-        self.test_label_2 = QLabel("Fuel")
-        self.test_label_2.setAlignment(Qt.AlignCenter)
-        
+        #### FUEL SEARCH FRAME ####
+        self.fuel_search_frame = QFrame()
+        self.fuel_search_frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.fuel_search_layout = QHBoxLayout(self.fuel_search_frame)       
+        # Search label
+        self.search_label = FormLabel("Search: ")
+        # Combobox to search for 
+        self.search_fuel_combobox = FormCombobox(is_editable=True)
+        # Spacer to distance the combobox from the 'add' btn
+        self.search_spacer = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Maximum)
+        # Add fuel btn
+        self.add_fuel_btn = FormPushButton("Add fuel", icon_path="add_icon.svg")
+
+        # Adding these items to this frame's layout
+        self.fuel_search_layout.addWidget(self.search_label)
+        self.fuel_search_layout.addWidget(self.search_fuel_combobox)
+        self.fuel_search_layout.addItem(self.search_spacer)
+        self.fuel_search_layout.addWidget(self.add_fuel_btn)
+
+        # Table
+        self.show_fuel_table = QTableWidget()
+        self.show_fuel_table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
         # Adding items to fuel page layout
-        self.fuel_page_layout.addWidget(self.test_label_2)
+        self.fuel_page_layout.addWidget(self.fuel_search_frame)
+        self.fuel_page_layout.addWidget(self.show_fuel_table)
 
         # About page
         self.about_page = QWidget()
         self.about_page.setObjectName(u"about_page")
         MainStackedWidget.addWidget(self.about_page)
+        # Setting layout
         self.about_page_layout = QHBoxLayout(self.about_page)
 
         # About page widgets and items
