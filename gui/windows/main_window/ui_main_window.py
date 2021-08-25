@@ -107,13 +107,14 @@ class UIMainWindow(object):
 
         # Left label
         self.top_label_left = QLabel("Specific mean heat for flue gases calculator")
+        self.top_label_left.setStyleSheet("font: 12pt 'Segoe UI'")
 
         # Top spacer
         self.top_spacer = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         # Right label
         self.top_label_right = QLabel("| Specific heat")
-        self.top_label_right.setStyleSheet("font: 700 9pt 'Segoe UI'")
+        self.top_label_right.setStyleSheet("font: 700 14pt 'Segoe UI'")
 
         # Top bar horizontal layout
         self.top_bar_layout = QHBoxLayout(self.top_bar)
