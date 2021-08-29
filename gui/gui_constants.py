@@ -43,3 +43,7 @@ class Color:
 class Paths:
     COMBOBOX_DROPDOWN_ARROW = "./gui/images/icons/cil-arrow-bottom.png"
     CHECKBOX_CHECK = "./gui/images/icons/cil-check-alt.png"
+
+
+class TableColumns:
+    SHOW_FUEL_COLUMNS = ("Fuel", "Carbon", "Hydrogen", "Oxygen", "Nitrogen", "Sulfur", "Moisture", "Ashes")

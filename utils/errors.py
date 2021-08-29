@@ -53,3 +53,7 @@ class InvalidNumbers(Exception):
 class InvalidTemperatures(Exception):
     def __init__(self, message: str) -> None:
         super().__init__(message)
+
+class NoFuelsFound(Exception):
+    def __init__(self, message: str) -> None:
+        super().__init__(message)

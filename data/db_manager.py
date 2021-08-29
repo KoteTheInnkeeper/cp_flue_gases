@@ -4,7 +4,7 @@ import logging
 from sqlite3.dbapi2 import OperationalError
 from data.db_cursor import DBCursor
 from utils.errors import *
-from typing import Tuple, Union
+from typing import List, Tuple, Union
 
 # Setting loggers
 log = logging.getLogger('cp_flue_gases.db_manager')
@@ -166,6 +166,15 @@ class Database:
         else:
             log.debug(f"A Fuel tuple was found for {name.title()}: {found_fuel}.")
             return found_fuel
+    
+    def get_fuels(self) -> List[Tuple[str]]:
+        """Get's all the fuels"""
+        with DBCursor(self.host) as cursor:
+            cursor.execute("SELECT * FROM fuels")
+            found_fuels = cursor.fetchall()
+            if not found_fuels:
+                raise NoFuelsFound("There are no fuels stored in database.")
+            return found_fuels
 
 
 

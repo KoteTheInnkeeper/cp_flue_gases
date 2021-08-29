@@ -1,3 +1,4 @@
+from utils.errors import *
 from gui.gui_constants import Dimension
 import logging
 import sys
@@ -43,7 +44,6 @@ class MainWindow(QMainWindow):
         self.ui.cp_btn.clicked.connect(self.cp_btn)
         self.ui.fuel_btn.clicked.connect(self.fuel_btn)
         self.ui.about_btn.clicked.connect(self.about_btn)
-
 
         # Showing the main window
         self.show()
@@ -105,10 +105,33 @@ class MainWindow(QMainWindow):
             self.reset_selection()
             self.ui.fuel_btn.set_active(True)
             self.ui.top_label_right.setText("| Fuel")
-            self.ui.pages.setCurrentWidget(self.ui.ui_pages.fuel_page)
+            self.populate_fuels_table()
+            self.ui.pages.setCurrentWidget(self.ui.ui_pages.fuel_page)            
         except Exception:
             log.critical("An exception was raised.")
             raise
+
+    def populate_fuels_table(self) -> None:
+        """Populates the fuel's table."""
+        try:
+            found_fuels = app_db.get_fuels()
+            self.ui.ui_pages.show_fuel_table.clearContents()
+            self.ui.ui_pages.show_fuel_table.setRowCount(len(found_fuels))
+            for fuel in found_fuels:
+                for i, found_fuel in enumerate(found_fuels):
+                    for ii, fuel_field in enumerate(found_fuel, 0):
+                        if ii == 0:
+                            item = QTableWidgetItem(fuel_field.title())
+                        else:
+                            item = QTableWidgetItem("%.2f" %round(float(fuel_field) * 100, 2) + "%")
+                            item.setTextAlignment(Qt.AlignCenter)
+                        item.setFlags(Qt.ItemIsEnabled)
+                        self.ui.ui_pages.show_fuel_table.setItem(i, ii, item)      
+
+            pass
+        except NoFuelsFound:
+            log.critical("There were no fuels to add to the table.")
+            QMessageBox.critical(self, "Running out of fuel!", "There isn't any fuel stored in database. You will need to add one of those.")
 
 
 # If we're on main, run the app

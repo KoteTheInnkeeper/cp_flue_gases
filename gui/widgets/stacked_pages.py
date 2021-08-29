@@ -1,5 +1,6 @@
 from gui.qt_core import *
 from gui.widgets.form_widgets import *
+from gui.gui_constants import *
 
 class Ui_MainStackedWidget(object):
     def setupUi(self, MainStackedWidget):
@@ -56,6 +57,29 @@ class Ui_MainStackedWidget(object):
         # Table
         self.show_fuel_table = QTableWidget()
         self.show_fuel_table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.show_fuel_table.setColumnCount(len(TableColumns.SHOW_FUEL_COLUMNS))
+        # Setting the horizontal header
+        show_fuel_table_header = self.show_fuel_table.horizontalHeader()
+        header_font = QFont()
+        header_font.setFamily('Segoe UI')
+        header_font.setPointSize(12)
+        header_font.setBold(True)
+        # Hiding the vertical header
+        self.show_fuel_table.verticalHeader().setHidden(True)
+        self.show_fuel_table.setStyleSheet("color: white; font: 10pt 'Segoe UI';")
+
+        for i, column in enumerate(TableColumns.SHOW_FUEL_COLUMNS):
+            item = QTableWidgetItem()
+            item.setText(" " + column + " ")
+            item.setTextAlignment(Qt.AlignCenter)
+            item.setFont(header_font)
+            self.show_fuel_table.setHorizontalHeaderItem(i, item)
+            if i == 0:
+                show_fuel_table_header.setSectionResizeMode(i, QHeaderView.Stretch)
+            else:
+                show_fuel_table_header.setSectionResizeMode(i, QHeaderView.ResizeToContents)
+
+
 
         # Adding items to fuel page layout
         self.fuel_page_layout.addWidget(self.fuel_search_frame)
