@@ -42,7 +42,10 @@ class Ui_MainStackedWidget(object):
         # Search label
         self.search_label = FormLabel("Search: ")
         # Combobox to search for 
-        self.search_fuel_combobox = FormCombobox(is_editable=True)
+        self.search_fuel_combobox = FormCombobox(is_editable=True, is_enabled=False)
+        # Checkbox to showall
+        self.show_all_checkbox = FormCheckBox('Show all')
+        self.show_all_checkbox.setChecked(True)
         # Spacer to distance the combobox from the 'add' btn
         self.search_spacer = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Maximum)
         # Add fuel btn
@@ -51,6 +54,7 @@ class Ui_MainStackedWidget(object):
         # Adding these items to this frame's layout
         self.fuel_search_layout.addWidget(self.search_label)
         self.fuel_search_layout.addWidget(self.search_fuel_combobox)
+        self.fuel_search_layout.addWidget(self.show_all_checkbox)
         self.fuel_search_layout.addItem(self.search_spacer)
         self.fuel_search_layout.addWidget(self.add_fuel_btn)
 
@@ -60,19 +64,13 @@ class Ui_MainStackedWidget(object):
         self.show_fuel_table.setColumnCount(len(TableColumns.SHOW_FUEL_COLUMNS))
         # Setting the horizontal header
         show_fuel_table_header = self.show_fuel_table.horizontalHeader()
-        """header_font = QFont()
-        header_font.setFamily('Segoe UI')
-        header_font.setPointSize(12)
-        header_font.setBold(True)"""
         # Hiding the vertical header
         self.show_fuel_table.verticalHeader().setHidden(True)
-        """self.show_fuel_table.setStyleSheet("color: white; font: 10pt 'Segoe UI';")"""
 
         for i, column in enumerate(TableColumns.SHOW_FUEL_COLUMNS):
             item = QTableWidgetItem()
             item.setText(" " + column + " ")
             item.setTextAlignment(Qt.AlignCenter)
-            # item.setFont(header_font)
             self.show_fuel_table.setHorizontalHeaderItem(i, item)
             if i == 0:
                 show_fuel_table_header.setSectionResizeMode(i, QHeaderView.Stretch)

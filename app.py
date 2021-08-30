@@ -9,7 +9,7 @@ with open('log.log', 'w'):
 logging.basicConfig(format="%(asctime)s %(levelname)-8s [%(filename)s:%(funcName)s:%(lineno)d] %(message)s", level=logging.DEBUG,
                     filename='log.log')
 log = logging.getLogger('cp_flue_gases')
-from gui.widgets.form_widgets import FormCombobox
+from gui.widgets.form_widgets import FormCheckBox, FormCombobox
 from utils.errors import *
 from gui.gui_constants import Dimension
 
@@ -46,6 +46,12 @@ class MainWindow(QMainWindow):
         self.ui.cp_btn.clicked.connect(self.cp_btn)
         self.ui.fuel_btn.clicked.connect(self.fuel_btn)
         self.ui.about_btn.clicked.connect(self.about_btn)
+
+        # Signal for the checkbox
+        self.ui.ui_pages.show_all_checkbox.toggled.connect(self.show_all_checkbox_toggled)
+
+        # Signal combobox text has changed
+        self.ui.ui_pages.search_fuel_combobox.currentTextChanged.connect(self.combobox_text_changed)
 
         # Showing the main window
         self.show()
@@ -107,18 +113,29 @@ class MainWindow(QMainWindow):
             self.reset_selection()
             self.ui.fuel_btn.set_active(True)
             self.ui.top_label_right.setText("| Fuel")
-            self.populate_fuels_table()
+            self.populate_fuels_table(self.ui.ui_pages.search_fuel_combobox, self.ui.ui_pages.show_all_checkbox)
             self.populate_fuels_combobox(self.ui.ui_pages.search_fuel_combobox)
+            self.ui.ui_pages.search_fuel_combobox.setEnabled(False)
         except Exception:
             log.critical("An exception was raised.")
             raise
         finally:
             self.ui.pages.setCurrentWidget(self.ui.ui_pages.fuel_page)            
 
-    def populate_fuels_table(self) -> None:
+    def combobox_text_changed(self) -> None:
+        """The combobox text has changed"""
+        try:
+            self.populate_fuels_table(self.ui.ui_pages.search_fuel_combobox, False)
+        except FuelNotFound:
+            log.critical("There's no fuel named like so.")
+        except Exception:
+            log.critical("An exception was raised.")
+
+    def populate_fuels_table(self, combobox: FormCombobox, checkbox_state: bool) -> None:
         """Populates the fuel's table."""
         try:
-            found_fuels = app_db.get_fuels()
+            name = "*" if checkbox_state else combobox.currentText().lower()
+            found_fuels = app_db.get_fuels(name)
             self.ui.ui_pages.show_fuel_table.clearContents()
             self.ui.ui_pages.show_fuel_table.setRowCount(len(found_fuels))
             for fuel in found_fuels:
@@ -130,7 +147,7 @@ class MainWindow(QMainWindow):
                             item = QTableWidgetItem("%.2f" %round(float(fuel_field) * 100, 2) + "%")
                             item.setTextAlignment(Qt.AlignCenter)
                         item.setFlags(Qt.ItemIsEnabled)
-                        self.ui.ui_pages.show_fuel_table.setItem(i, ii, item)      
+                        self.ui.ui_pages.show_fuel_table.setItem(i, ii, item)
         except NoFuelsFound:
             log.critical("There were no fuels to add to the table.")
             QMessageBox.critical(self, "Running out of fuel!", "There isn't any fuel stored in database. You will need to add one of those.")
@@ -142,15 +159,29 @@ class MainWindow(QMainWindow):
             log.debug("Populating a combobox. Getting the fuel's names.")
             fuels_names = app_db.get_fuels_names()
             combobox.addItems(fuels_names)
+        except NoFuelsFound:
+            log.critical("No fuels were found.")
         except Exception:
             log.critical("An exception was raised.")
             raise
         else:
             log.debug("Combobox successfully updated.")
         finally:
-            if not combobox.count():
-                log.debug("There are no fuels. Disabling this combobox.")
-                combobox.setEnabled(False)            
+            log.debug("Enabling or disabling the combobox, according to what's in storage.")
+            combobox.setEnabled(bool(combobox.count()))
+    
+    def show_all_checkbox_toggled(self, state: bool) -> None:
+        """Changes the combobox state and population of the table settings."""
+        try:
+            log.debug("The 'Show all' checkbox was toggled.")
+            self.ui.ui_pages.search_fuel_combobox.setEnabled(not state)
+            self.populate_fuels_table(self.ui.ui_pages.search_fuel_combobox, state)
+        except Exception:
+            log.critical("An exception was raised.")
+            raise
+
+        
+            
 
 
 

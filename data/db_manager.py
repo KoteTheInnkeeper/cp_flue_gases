@@ -167,10 +167,14 @@ class Database:
             log.debug(f"A Fuel tuple was found for {name.title()}: {found_fuel}.")
             return found_fuel
     
-    def get_fuels(self) -> List[Tuple[str]]:
-        """Get's all the fuels"""
+    def get_fuels(self, name: str) -> List[Tuple[str]]:
+        """Get's the fuel by name
+        :param name: self explanatory"""
         with DBCursor(self.host) as cursor:
-            cursor.execute("SELECT * FROM fuels")
+            if name == '*':
+                cursor.execute("SELECT * FROM fuels")
+            else:
+                cursor.execute("SELECT * FROM fuels WHERE name = ?", (name.lower(), ))            
             found_fuels = cursor.fetchall()
             if not found_fuels:
                 raise NoFuelsFound("There are no fuels stored in database.")
