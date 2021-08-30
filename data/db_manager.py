@@ -176,6 +176,14 @@ class Database:
                 raise NoFuelsFound("There are no fuels stored in database.")
             return found_fuels
 
+    def get_fuels_names(self) -> List[str]:
+        """Get's all the fuels"""
+        with DBCursor(self.host) as cursor:
+            cursor.execute("SELECT name FROM fuels")
+            found_fuels = cursor.fetchall()
+            if not found_fuels:
+                raise NoFuelsFound("There are no fuels stored in database.")
+            return [fuel[0].upper() for fuel in found_fuels]
 
 
         

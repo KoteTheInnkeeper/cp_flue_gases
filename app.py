@@ -1,5 +1,3 @@
-from utils.errors import *
-from gui.gui_constants import Dimension
 import logging
 import sys
 
@@ -11,6 +9,10 @@ with open('log.log', 'w'):
 logging.basicConfig(format="%(asctime)s %(levelname)-8s [%(filename)s:%(funcName)s:%(lineno)d] %(message)s", level=logging.DEBUG,
                     filename='log.log')
 log = logging.getLogger('cp_flue_gases')
+from gui.widgets.form_widgets import FormCombobox
+from utils.errors import *
+from gui.gui_constants import Dimension
+
 
 # Other imports
 from gui.qt_core import *
@@ -106,10 +108,12 @@ class MainWindow(QMainWindow):
             self.ui.fuel_btn.set_active(True)
             self.ui.top_label_right.setText("| Fuel")
             self.populate_fuels_table()
-            self.ui.pages.setCurrentWidget(self.ui.ui_pages.fuel_page)            
+            self.populate_fuels_combobox(self.ui.ui_pages.search_fuel_combobox)
         except Exception:
             log.critical("An exception was raised.")
             raise
+        finally:
+            self.ui.pages.setCurrentWidget(self.ui.ui_pages.fuel_page)            
 
     def populate_fuels_table(self) -> None:
         """Populates the fuel's table."""
@@ -127,11 +131,27 @@ class MainWindow(QMainWindow):
                             item.setTextAlignment(Qt.AlignCenter)
                         item.setFlags(Qt.ItemIsEnabled)
                         self.ui.ui_pages.show_fuel_table.setItem(i, ii, item)      
-
-            pass
         except NoFuelsFound:
             log.critical("There were no fuels to add to the table.")
             QMessageBox.critical(self, "Running out of fuel!", "There isn't any fuel stored in database. You will need to add one of those.")
+    
+    def populate_fuels_combobox(self, combobox: FormCombobox) -> None:
+        """Populates the combobox with the fuel's names.
+        :param combobox: QComboBox object to be populated."""
+        try:
+            log.debug("Populating a combobox. Getting the fuel's names.")
+            fuels_names = app_db.get_fuels_names()
+            combobox.addItems(fuels_names)
+        except Exception:
+            log.critical("An exception was raised.")
+            raise
+        else:
+            log.debug("Combobox successfully updated.")
+        finally:
+            if not combobox.count():
+                log.debug("There are no fuels. Disabling this combobox.")
+                combobox.setEnabled(False)            
+
 
 
 # If we're on main, run the app
