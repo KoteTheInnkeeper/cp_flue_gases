@@ -49,7 +49,7 @@ class Ui_MainStackedWidget(object):
         # Spacer to distance the combobox from the 'add' btn
         self.search_spacer = QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Maximum)
         # Add fuel btn
-        self.add_fuel_btn = FormPushButton("Add fuel", icon_path="add_icon.svg")
+        self.add_fuel_btn = FormPushButton("Add fuel")
 
         # Adding these items to this frame's layout
         self.fuel_search_layout.addWidget(self.search_label)

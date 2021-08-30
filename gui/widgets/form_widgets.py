@@ -272,11 +272,9 @@ class FormPushButton(QPushButton):
         self,
         text: str="", 
         height: int=35, 
-        minimum_width: int=125, 
-        text_padding: int=50, 
+        minimum_width: int=100, 
+        text_padding: int=0, 
         text_color: str=Color.FORM_BTN_TEXT, 
-        icon_path: str="", 
-        icon_color: str=Color.FORM_BTN_ICON_COLOR,
         btn_color=Color.FORM_BTN_COLOR, 
         btn_hover=Color.FORM_BTN_HOVER,
         btn_pressed=Color.FORM_BTN_PRESSED,
@@ -296,9 +294,7 @@ class FormPushButton(QPushButton):
         # Custom parameters
         self.minimum_width = minimum_width
         self.text_padding = text_padding
-        self.icon_path = icon_path
         self.text_color = text_color
-        self.icon_color = icon_color
         self.btn_color = btn_color
         self.btn_hover = btn_hover
         self.btn_pressed = btn_pressed
@@ -314,7 +310,7 @@ class FormPushButton(QPushButton):
             color: {self.text_color};
             background-color: {self.btn_color};
             padding-left: {self.text_padding}px;
-            text-align: left;
+            text-align: center;
             font: 100 12pt 'Segoe UI';
             border-radius: 5px;
             border: 2px solid {self.pressed_border};
@@ -332,45 +328,6 @@ class FormPushButton(QPushButton):
         """
         self.setStyleSheet(stylesheet_str)
     
-
-    def paintEvent(self, event):
-        # Without the following line, this method would've overwrite the QPushButton.paintEvent one, meaning we
-        # would've lose all our 'formatting' done by using it (in the background, within the methods that are defined 
-        # in the definition for QPushButton)
-        QPushButton.paintEvent(self, event)
-
-        # Painter -> a 'design workframe'
-        qp = QPainter()
-        qp.begin(self)
-        qp.setRenderHint(QPainter.Antialiasing)
-        qp.setPen(Qt.NoPen)
-
-        # Reference rectangle for our icon
-        rect = QRect(0, 0, 50, self.minimumHeight())
-
-        self.draw_icon(qp, self.icon_path, rect, self.icon_color)
-
-        qp.end()
-
-    def draw_icon(self, qp: QPainter, image: str, rect: QRect, color: str):
-        # Format path
-        app_path = os.path.abspath(os.getcwd())
-        folder = "gui/images/icons"
-        path = os.path.join(app_path, folder)
-        icon_path = os.path.normpath(os.path.join(path, image))
-
-         # Draw icon
-        icon = QPixmap(icon_path)
-        painter = QPainter(icon)
-        painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
-        painter.fillRect(icon.rect(), color)
-        qp.drawPixmap(
-            (rect.width() - icon.width()) / 2,
-            (rect.height() - icon.height()) / 2,
-            icon
-        )
-        painter.end()
-
 
 class FormLabel(QLabel):
     def __init__(

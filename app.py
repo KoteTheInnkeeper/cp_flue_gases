@@ -116,6 +116,8 @@ class MainWindow(QMainWindow):
             self.populate_fuels_table(self.ui.ui_pages.search_fuel_combobox, self.ui.ui_pages.show_all_checkbox)
             self.populate_fuels_combobox(self.ui.ui_pages.search_fuel_combobox)
             self.ui.ui_pages.search_fuel_combobox.setEnabled(False)
+        except FuelNotFound:
+            QMessageBox.critical(self, "Running out of fuel!", "There isn't any fuel stored in database. You will need to add one of those.")
         except Exception:
             log.critical("An exception was raised.")
             raise
@@ -150,7 +152,7 @@ class MainWindow(QMainWindow):
                         self.ui.ui_pages.show_fuel_table.setItem(i, ii, item)
         except NoFuelsFound:
             log.critical("There were no fuels to add to the table.")
-            QMessageBox.critical(self, "Running out of fuel!", "There isn't any fuel stored in database. You will need to add one of those.")
+            raise
     
     def populate_fuels_combobox(self, combobox: FormCombobox) -> None:
         """Populates the combobox with the fuel's names.
