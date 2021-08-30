@@ -394,13 +394,57 @@ class FormLabel(QLabel):
         """)
 
 
+class FormTableWidget(QTableWidget):
+    def __init__(self):
+        super().__init__()
+        # Setting the style
+        self.set_style()
 
-
-
-
-
-
-            
-            
-            
+    def set_style(self):
         
+        stylesheet_str = f"""
+QTableWidget {{	
+    color: white;
+	background-color: transparent;
+	padding: 10px;
+	border-radius: 5px;
+	gridline-color: rgb(44, 49, 58);
+	border-bottom: 1px solid rgb(44, 49, 60);
+}}
+QTableWidget::item{{
+	border-color: grey;
+	padding-left: 5px;
+	padding-right: 5px;
+	gridline-color: grey;
+}}
+QTableWidget::item:selected{{
+	background-color: rgb(189, 147, 249);
+}}
+QHeaderView::section{{
+	background-color: rgb(33, 37, 43);
+	max-width: 30px;
+	border: 1px solid grey;
+	border-style: none;
+    border-bottom: 1px solid rgb(44, 49, 60);
+    border-right: 1px solid rgb(44, 49, 60);
+}}
+QTableWidget::horizontalHeader {{	
+    font: 100 12pt 'Segoe UI';
+	background-color: rgb(33, 37, 43);
+}}
+QHeaderView::section:horizontal
+{{
+    color: white;
+    font: 75 12pt 'Segoe UI';
+    border: 1px solid rgb(33, 37, 43);
+	background-color: rgb(33, 37, 43);
+	padding: 3px;
+	border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}}
+QHeaderView::section:vertical
+{{
+    border: 1px solid rgb(44, 49, 60);
+}}
+"""
+        self.setStyleSheet(stylesheet_str)
